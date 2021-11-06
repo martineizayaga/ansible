@@ -1,0 +1,6 @@
+#!/bin/sh
+
+docker build -t nvm-computer . \
+&& docker run --rm -it nvm-computer bash
+
+
