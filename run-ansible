@@ -1,7 +1,8 @@
 #!/bin/sh
 
 ansible-playbook \
-	-t "zsh, dotfiles, debug" \
 	--ask-vault-pass \
+	--skip-tags "authorize" \
 	local.yml
 	#--ask-become-pass
+	# -t "ssh, zsh, node, debug" \
