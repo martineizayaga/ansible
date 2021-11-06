@@ -2,7 +2,7 @@
 
 ## Dev Workflow
 
-Build a dockerfile for testing
+Build a docker image for testing
 
 ```console
 you@host$ docker build -t nvm-computer .
@@ -23,8 +23,10 @@ Ansible will run and install/configure the container. You can modify the ansible
 
 ## Real Usage
 
-Install ansible on your new computer (TODO: provide a bash script that can be copied for doing this). Then run this playbook:
+Install ansible on your new computer (**TODO**: provide a bash script that can be copied for doing this). Then run this playbook:
 ```console
 you@host$ ansible-pull -U https://github.com/ncko/ansible
 ```
 
+## Todo
+- provide a bash script that can be copied and created in a new environment to install ansible and run this playbook
