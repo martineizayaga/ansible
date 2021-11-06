@@ -1,0 +1,25 @@
+- hosts: localhost
+  vars:
+    source_key_github: "./.ssh/id_github"
+    dest_key_github: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+  pre_tasks:
+  - name: Update cache
+    become: true 
+    apt:
+      force_apt_get: true
+      update_cache: true
+      state: present
+    tags:
+      - install
+      - core
+  tasks:
+    - name: Prints two lines of messages, but only if there is an environment value set
+      ansible.builtin.debug:
+        msg:
+          - "HOME: {{ lookup('env', 'HOME') }}"
+          - "USER: {{ lookup('env', 'USER') }}"
+      tags:
+        - debug
+    - include: tasks/ssh.yml
+    - include: tasks/zsh.yml
+    - include: tasks/node.yml
