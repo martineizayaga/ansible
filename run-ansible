@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ansible-playbook \
+	-t "zsh, dotfiles, debug" \
+	--ask-vault-pass \
+	local.yml
+	#--ask-become-pass
