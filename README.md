@@ -21,11 +21,11 @@ root@9bh23e$: ./run-ansible
 
 Ansible will run and install/configure the container. You can modify the ansible command inside `run-ansible` to only run specific tasks with a particular tag.
 
-## Real Usage
+## Realworld Usage
 
 Install ansible on your new computer (**TODO**: provide a bash script that can be copied for doing this). Then run this playbook:
 ```console
-you@host$ ansible-pull -U https://github.com/ncko/ansible
+you@host$ ansible-pull -U https://github.com/ncko/ansible --ask-become-pass --ask-vault-pass
 ```
 
 ## Todo
