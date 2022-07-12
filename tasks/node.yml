@@ -1,4 +1,5 @@
-- name: install node
+- name: install node Debian
+  when: ansible_facts['os_family'] == 'Debian'
   apt:
     name: ['nodejs', 'npm']
   tags:

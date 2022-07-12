@@ -2,17 +2,56 @@
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+  vars_files:
+    - default.config.yml
   pre_tasks:
-  - name: Update cache
-    become: true 
-    apt:
-      force_apt_get: true
-      update_cache: true
-      state: present
-    tags:
-      - install
-      - core
+    - name: Update cache
+      become: true
+      apt:
+        force_apt_get: true
+        update_cache: true
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+      tags:
+        - install
+        - core
   tasks:
+    - ansible.builtin.import_role:
+        name: elliotweiser.osx-command-line-tools
+      when: ansible_facts['os_family'] == 'Darwin'
+      tags: ['dropbox', 'dotfiles']
+    - include: tasks/ssh.yml
+    - include: tasks/zsh.yml
+    - ansible.builtin.import_role:
+        name: geerlingguy.mac.homebrew
+      tags: ['homebrew', 'dropbox', 'dotfiles']
+      when: ansible_facts['os_family'] == "Darwin"
+    - name: Check if dropbox is configured
+      ansible.builtin.stat:
+        path: /Users/martin/Dropbox
+      register: dropbox_directory
+      tags: ['dropbox', 'dotfiles']
+    - name: Set up dropbox
+      block:
+        - ansible.builtin.pause:
+            prompt: "Set up dropbox.\n\nPress Enter to continue."
+        - name: Check that dropbox is configured
+          ansible.builtin.wait_for:
+            path: /Users/martin/Dropbox
+            state: present
+      when: not dropbox_directory.stat.exists
+      tags: ['dropbox', 'dotfiles']
+    - name: Set up keepassxc
+      ansible.builtin.pause:
+        prompt: "Set up keepassxc.\n\nPress Enter to continue."
+    - include_role:
+        name: geerlingguy.mac.mas
+      when: ansible_facts['os_family'] == "Darwin" and (mas_installed_apps or mas_installed_app_ids)
+      tags: ['mas']
+    - include_role:
+        name: geerlingguy.mac.dock
+      when: ansible_facts['os_family'] == "Darwin" and configure_dock
+      tags: ['dock']
     - name: Prints two lines of messages, but only if there is an environment value set
       ansible.builtin.debug:
         msg:
@@ -20,6 +59,4 @@
           - "USER: {{ lookup('env', 'USER') }}"
       tags:
         - debug
-    - include: tasks/ssh.yml
-    - include: tasks/zsh.yml
-    - include: tasks/node.yml
+    - include: tasks/dotfiles.yml

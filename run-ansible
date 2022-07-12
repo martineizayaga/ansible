@@ -2,7 +2,7 @@
 
 ansible-playbook \
 	--ask-vault-pass \
-	--skip-tags "authorize" \
 	local.yml
+	#--skip-tags "authorize" \
 	#--ask-become-pass
 	# -t "ssh, zsh, node, debug" \

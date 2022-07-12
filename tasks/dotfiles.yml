@@ -1,0 +1,13 @@
+- name: Installing stow
+  ansible.builtin.apt: name=stow
+  when: ansible_facts['os_family'] == 'Debian'
+  tags:
+    - install
+    - dotfiles
+    - stow
+- name: Stow dotfiles
+  ansible.builtin.command: ./install
+  tags:
+    - install
+    - dotfiles
+    - stow

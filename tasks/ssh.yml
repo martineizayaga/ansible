@@ -4,7 +4,6 @@
     mode: 0700
     state: directory
   tags:
-    - dotfiles
     - ssh
 - name: Install ssh key
   copy:
@@ -12,7 +11,6 @@
     dest: "{{ dest_key }}"
     mode: 0600
   tags:
-    - dotfiles
     - ssh
 - name: Install ssh key public
   copy:
@@ -20,14 +18,4 @@
     dest: "{{ dest_key }}.pub"
     mode: 0644
   tags:
-    - dotfiles
     - ssh
-- name: Set authorized key took from file
-  authorized_key:
-    user: "{{ lookup('env', 'USER') }}"
-    state: present
-    key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
-  with_fileglob:
-    - "{{ lookup('env', 'HOME') }}/.ssh/*.pub"
-  tags:
-    - authorize
